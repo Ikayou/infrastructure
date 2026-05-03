@@ -18,4 +18,4 @@ trivy_scan:
     entrypoint: [""]
   stage: security
   script:
-    - trivy image --severity HIGH,CRITICAL nginx:latest
+    - trivy image --severity HIGH,CRITICAL --exit-code 1 nginx:latest

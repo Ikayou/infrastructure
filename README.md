@@ -1,5 +1,7 @@
 # Terraform Docker Nginx Demo
 
+![Pipeline Status](https://gitlab.com/Ikayou/infrastructure/badges/main/pipeline.svg)
+
 ## Overview
 This project provisions an Nginx container using Terraform and Docker provider.
 
