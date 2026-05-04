@@ -32,6 +32,10 @@ def db_check():
         return {"database": "connected"}
     except Exception as e:
         return {"database": "connection failed", "error": str(e)}
+    
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 
 @app.post("/users")

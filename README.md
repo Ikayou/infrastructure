@@ -67,7 +67,37 @@ curl http://localhost:8080/users
 # Datenbankverbindung prüfen
 curl http://localhost:8080/db-check
 
+```
+
 ## Security Improvement
 
 Der Backend-Container wurde von einem Debian-basierten Python-Image auf ein Alpine-basiertes Image umgestellt.  
 Dadurch konnte die Anzahl der von Trivy gefundenen HIGH/CRITICAL-Schwachstellen auf 0 reduziert werden.
+
+## API Usage
+
+### Create User
+curl -X POST http://localhost:8080/users \
+  -H "Content-Type: application/json" \
+  -d '{"name":"yuichiro"}'
+
+### Get Users
+curl http://localhost:8080/users
+
+
+もう少しポートフォリオっぽくするなら：
+
+```md
+## Architecture Diagram
+
+```mermaid
+flowchart TD
+    User[User / Browser] --> Nginx[Nginx Reverse Proxy]
+    Nginx --> Backend[FastAPI Backend]
+    Backend --> DB[(PostgreSQL Database)]
+
+    Terraform[Terraform] --> Nginx
+    Terraform --> Backend
+    Terraform --> DB
+    Terraform --> Network[Docker Network]
+    Terraform --> Volume[Docker Volume]

@@ -48,3 +48,9 @@ sbom:
     paths:
       - sbom.json
     expire_in: 1 week
+
+healthcheck_note:
+  image: alpine:latest
+  stage: validate
+  script:
+    - echo "Healthcheck endpoint is implemented at /health"

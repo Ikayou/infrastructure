@@ -40,6 +40,14 @@ resource "docker_image" "backend" {
   triggers = {
     rebuild = timestamp()
   }
+
+  healthcheck {
+    test     = ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+    interval = "10s"
+    timeout  = "3s"
+    retries  = 3
+  }
+
 }
 
 resource "docker_container" "backend" {
