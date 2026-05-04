@@ -66,3 +66,8 @@ curl http://localhost:8080/users
 
 # Datenbankverbindung prüfen
 curl http://localhost:8080/db-check
+
+## Security Improvement
+
+Der Backend-Container wurde von einem Debian-basierten Python-Image auf ein Alpine-basiertes Image umgestellt.  
+Dadurch konnte die Anzahl der von Trivy gefundenen HIGH/CRITICAL-Schwachstellen auf 0 reduziert werden.

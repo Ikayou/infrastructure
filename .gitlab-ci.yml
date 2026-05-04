@@ -36,3 +36,15 @@ trivy_scan:
   stage: security
   script:
     - trivy image --username "$CI_REGISTRY_USER" --password "$CI_REGISTRY_PASSWORD" --scanners vuln --severity HIGH,CRITICAL --exit-code 1 "$IMAGE_NAME"
+
+sbom:
+  image:
+    name: aquasec/trivy:latest
+    entrypoint: [""]
+  stage: security
+  script:
+    - trivy image --username "$CI_REGISTRY_USER" --password "$CI_REGISTRY_PASSWORD" --format cyclonedx --output sbom.json "$IMAGE_NAME"
+  artifacts:
+    paths:
+      - sbom.json
+    expire_in: 1 week
