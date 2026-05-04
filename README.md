@@ -83,21 +83,3 @@ curl -X POST http://localhost:8080/users \
 
 ### Get Users
 curl http://localhost:8080/users
-
-
-もう少しポートフォリオっぽくするなら：
-
-```md
-## Architecture Diagram
-
-```mermaid
-flowchart TD
-    User[User / Browser] --> Nginx[Nginx Reverse Proxy]
-    Nginx --> Backend[FastAPI Backend]
-    Backend --> DB[(PostgreSQL Database)]
-
-    Terraform[Terraform] --> Nginx
-    Terraform --> Backend
-    Terraform --> DB
-    Terraform --> Network[Docker Network]
-    Terraform --> Volume[Docker Volume]
