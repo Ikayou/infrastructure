@@ -38,6 +38,7 @@ So wird eine reproduzierbare und automatisierte Infrastruktur bereitgestellt.
 ```bash
 terraform init
 terraform apply
+```
 
 ## Erweiterung: Backend API & Datenbank
 
