@@ -35,4 +35,4 @@ trivy_scan:
     entrypoint: [""]
   stage: security
   script:
-    - trivy image --severity HIGH,CRITICAL --exit-code 1 $IMAGE_NAME
+    - trivy image --username "$CI_REGISTRY_USER" --password "$CI_REGISTRY_PASSWORD" --scanners vuln --severity HIGH,CRITICAL --exit-code 1 "$IMAGE_NAME"
