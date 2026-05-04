@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Terraform User Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #222;
+    }
+
+    input {
+      padding: 10px;
+      width: 250px;
+    }
+
+    button {
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>User Management Demo</h1>
+
+  <p>
+    Diese einfache Oberfläche kommuniziert mit dem FastAPI-Backend
+    und speichert Benutzer in PostgreSQL.
+  </p>
+
+  <input id="nameInput" placeholder="Name eingeben" />
+  <button onclick="createUser()">Benutzer erstellen</button>
+
+  <h2>Benutzer</h2>
+  <button onclick="loadUsers()">Benutzer laden</button>
+  <ul id="userList"></ul>
+
+  <script>
+    async function createUser() {
+      const name = document.getElementById("nameInput").value;
+
+      if (!name) {
+        alert("Bitte einen Namen eingeben.");
+        return;
+      }
+
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name })
+      });
+
+      if (!response.ok) {
+        alert("Fehler beim Erstellen des Benutzers.");
+        return;
+      }
+
+      document.getElementById("nameInput").value = "";
+      await loadUsers();
+    }
+
+    async function loadUsers() {
+      const response = await fetch("/api/users");
+      const users = await response.json();
+
+      const list = document.getElementById("userList");
+      list.innerHTML = "";
+
+      users.forEach(user => {
+        const item = document.createElement("li");
+        item.textContent = `${user.id}: ${user.name}`;
+        list.appendChild(item);
+      });
+    }
+
+    loadUsers();
+  </script>
+</body>
+</html>

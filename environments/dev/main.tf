@@ -36,18 +36,6 @@ resource "docker_image" "backend" {
   build {
     context = abspath("${path.module}/../../backend")
   }
-
-  triggers = {
-    rebuild = timestamp()
-  }
-
-  healthcheck {
-    test     = ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
-    interval = "10s"
-    timeout  = "3s"
-    retries  = 3
-  }
-
 }
 
 resource "docker_container" "backend" {
@@ -63,6 +51,13 @@ resource "docker_container" "backend" {
 
   networks_advanced {
     name = docker_network.app_network.name
+  }
+
+  healthcheck {
+    test     = ["CMD", "wget", "-qO-", "http://localhost:8000/health"]
+    interval = "10s"
+    timeout  = "3s"
+    retries  = 3
   }
 
   depends_on = [
@@ -90,6 +85,11 @@ resource "docker_container" "nginx" {
   volumes {
     host_path      = abspath("${path.module}/nginx.conf")
     container_path = "/etc/nginx/nginx.conf"
+  }
+
+  volumes {
+    host_path      = abspath("${path.module}/../../frontend")
+    container_path = "/usr/share/nginx/html"
   }
 
   depends_on = [
