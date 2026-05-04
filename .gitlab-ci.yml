@@ -1,6 +1,10 @@
 stages:
   - validate
+  - build
   - security
+
+variables:
+  IMAGE_NAME: $CI_REGISTRY_IMAGE/backend:latest
 
 terraform_validate:
   image:
@@ -12,10 +16,23 @@ terraform_validate:
     - terraform fmt -check
     - terraform validate
 
+docker_build:
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" $CI_REGISTRY --password-stdin
+  script:
+    - docker build -t $IMAGE_NAME ./backend
+    - docker push $IMAGE_NAME
+
 trivy_scan:
   image:
     name: aquasec/trivy:latest
     entrypoint: [""]
   stage: security
   script:
-    - trivy image --severity HIGH,CRITICAL --exit-code 1 nginx:latest
+    - trivy image --severity HIGH,CRITICAL --exit-code 1 $IMAGE_NAME
