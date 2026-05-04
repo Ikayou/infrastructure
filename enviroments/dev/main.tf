@@ -31,16 +31,35 @@ resource "docker_container" "postgres" {
 }
 
 resource "docker_image" "backend" {
-  name = "nginxdemos/hello:latest"
+  name = "dev-fastapi-backend:latest"
+
+  build {
+    context = abspath("${path.module}/../../backend")
+  }
+
+  triggers = {
+    rebuild = timestamp()
+  }
 }
 
 resource "docker_container" "backend" {
   name  = "dev-backend"
   image = docker_image.backend.name
 
+  env = [
+    "DB_HOST=dev-postgres",
+    "DB_NAME=appdb",
+    "DB_USER=appuser",
+    "DB_PASSWORD=apppassword"
+  ]
+
   networks_advanced {
     name = docker_network.app_network.name
   }
+
+  depends_on = [
+    docker_container.postgres
+  ]
 }
 
 resource "docker_image" "nginx" {
@@ -63,5 +82,9 @@ resource "docker_container" "nginx" {
   volumes {
     host_path      = abspath("${path.module}/nginx.conf")
     container_path = "/etc/nginx/nginx.conf"
-}
+  }
+
+  depends_on = [
+    docker_container.backend
+  ]
 }

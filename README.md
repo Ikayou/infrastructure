@@ -38,3 +38,30 @@ So wird eine reproduzierbare und automatisierte Infrastruktur bereitgestellt.
 ```bash
 terraform init
 terraform apply
+
+## Erweiterung: Backend API & Datenbank
+
+Im nächsten Schritt wurde das Projekt um einen eigenen Backend-Service erweitert.  
+Hierfür habe ich eine einfache REST-API mit FastAPI entwickelt und in einen eigenen Docker-Container integriert.
+
+Der Backend-Service ist mit einer PostgreSQL-Datenbank verbunden und ermöglicht grundlegende Datenbankoperationen.
+
+### Funktionen
+
+- Erstellung von Benutzern über eine REST-API (POST /users)
+- Abruf aller Benutzer aus der Datenbank (GET /users)
+- Überprüfung der Datenbankverbindung (GET /db-check)
+
+Die Daten werden persistent in einer PostgreSQL-Datenbank gespeichert, die ebenfalls über Terraform bereitgestellt wird.
+
+### Beispiel API Nutzung
+
+```bash
+# Benutzer erstellen
+curl -X POST "http://localhost:8080/users?name=yuichiro"
+
+# Benutzer anzeigen
+curl http://localhost:8080/users
+
+# Datenbankverbindung prüfen
+curl http://localhost:8080/db-check
