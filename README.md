@@ -83,3 +83,10 @@ curl -X POST http://localhost:8080/users \
 
 ### Get Users
 curl http://localhost:8080/users
+
+## Frontend
+
+Zusätzlich wurde eine einfache Benutzeroberfläche erstellt.  
+Über das Frontend können Benutzer im Browser angelegt und aus der PostgreSQL-Datenbank geladen werden.
+
+Der Zugriff erfolgt über Nginx. API-Anfragen werden über `/api/` an das FastAPI-Backend weitergeleitet.

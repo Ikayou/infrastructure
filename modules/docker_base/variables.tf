@@ -18,3 +18,14 @@ variable "external_port" {
   description = "host port number to bind to"
   type        = number
 }
+
+variable "network_name" {
+  description = "Docker network name to connect"
+  type        = string
+}
+
+variable "env_vars" {
+  description = "Environment variables for the container"
+  type        = list(string)
+  default     = []
+}

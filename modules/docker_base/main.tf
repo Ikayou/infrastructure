@@ -14,8 +14,15 @@ resource "docker_image" "app_image" {
 resource "docker_container" "app_container" {
   image = docker_image.app_image.image_id
   name  = var.container_name
+
+  networks_advanced {
+    name = var.network_name
+  }
+
   ports {
     internal = var.internal_port
     external = var.external_port
   }
+
+  env = var.env_vars
 }
