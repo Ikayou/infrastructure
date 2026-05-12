@@ -4,7 +4,7 @@ stages:
   - security
 
 variables:
-  IMAGE_NAME: $CI_REGISTRY_IMAGE/backend:latest
+  IMAGE_NAME: $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
 
 terraform_validate:
   image:
@@ -30,6 +30,8 @@ docker_build:
     - docker push $IMAGE_NAME
 
 trivy_scan:
+  needs:
+    - docker_build
   image:
     name: aquasec/trivy:latest
     entrypoint: [""]
@@ -38,6 +40,8 @@ trivy_scan:
     - trivy image --username "$CI_REGISTRY_USER" --password "$CI_REGISTRY_PASSWORD" --scanners vuln --severity HIGH,CRITICAL --exit-code 1 "$IMAGE_NAME"
 
 sbom:
+  needs:
+    - docker_build
   image:
     name: aquasec/trivy:latest
     entrypoint: [""]
